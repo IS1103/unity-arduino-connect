@@ -13,6 +13,7 @@ public class ArduinoConnector : MonoBehaviour
     public static Action<string> receiveEvent, writeEvent;
 
     private SerialPort arduinoStream;
+    private Thread readThread;
     private string readMessage;
 
     void Start()
@@ -24,11 +25,30 @@ public class ArduinoConnector : MonoBehaviour
             try
             {
                 arduinoStream.Open();
+                readThread = new Thread(new ThreadStart(ArduinoRead)); //實例化執行緒與指派呼叫函式
+                readThread.Start(); //開啟執行緒
                 Debug.Log("SerialPort開啟連接");
             }
             catch (Exception ex)
             {
                 Debug.Log("SerialPort連接失敗:"+ ex.Message);
+            }
+        }
+    }
+
+    private void ArduinoRead()
+    {
+        while (arduinoStream.IsOpen)
+        {
+            try
+            {
+                readMessage = arduinoStream.ReadLine(); // 讀取SerialPort資料並裝入readMessage
+                receiveEvent?.Invoke(readMessage);
+                Debug.Log(readMessage);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning("取得資料失敗:"+ex.Message);
             }
         }
     }
