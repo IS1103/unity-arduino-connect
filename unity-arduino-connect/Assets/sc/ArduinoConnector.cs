@@ -14,7 +14,7 @@ public class ArduinoConnector : MonoBehaviour
 
     private SerialPort arduinoStream;
     private Thread readThread;
-    private string readMessage;
+    private Queue<string> queue;
 
     void Start()
     {
@@ -22,6 +22,7 @@ public class ArduinoConnector : MonoBehaviour
         {
             writeEvent = WriteEvent;
             arduinoStream = new SerialPort(portName, baud);
+            queue = new Queue<string>();
             try
             {
                 arduinoStream.Open();
@@ -42,14 +43,22 @@ public class ArduinoConnector : MonoBehaviour
         {
             try
             {
-                readMessage = arduinoStream.ReadLine(); // 讀取SerialPort資料並裝入readMessage
-                receiveEvent?.Invoke(readMessage);
+                string readMessage = arduinoStream.ReadLine(); // 讀取SerialPort資料並裝入readMessage
+                queue.Enqueue(readMessage);
                 Debug.Log(readMessage);
             }
             catch (Exception ex)
             {
                 Debug.LogWarning("取得資料失敗:"+ex.Message);
             }
+        }
+    }
+
+    private void Update()
+    {
+        if (queue.Count>0)
+        {
+            receiveEvent?.Invoke(queue.Dequeue());
         }
     }
 
@@ -66,22 +75,6 @@ public class ArduinoConnector : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (arduinoStream.IsOpen)
-        {
-            try
-            {
-                readMessage = arduinoStream.ReadLine();
-                //Debug.Log(readMessage);
-                receiveEvent?.Invoke(readMessage);
-            }
-            catch (Exception e)
-            {
-                Debug.LogWarning(e.Message);
-            }
-        }
-    }
 
     void OnApplicationQuit()
     {
