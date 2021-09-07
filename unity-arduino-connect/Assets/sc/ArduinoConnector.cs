@@ -10,7 +10,7 @@ public class ArduinoConnector : MonoBehaviour
     public int baud;
     public string portName;
 
-    public static Action<string> receiveEvent, writeEvent;
+    public Action<string> receiveEvent, writeEvent;
 
     private SerialPort arduinoStream;
     private Thread readThread;

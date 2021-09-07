@@ -300,6 +300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5de32cdb7331471d9da9f803e42df31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  arduinoConnector: {fileID: 519420030}
   img: {fileID: 1367238660}
 --- !u!1 &610089539
 GameObject:

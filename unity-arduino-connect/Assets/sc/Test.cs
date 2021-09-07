@@ -6,10 +6,11 @@ using UnityEngine.UI;
 
 public class Test : MonoBehaviour
 {
+    public ArduinoConnector arduinoConnector;
     public Image img;
     void Start()
     {
-        ArduinoConnector.receiveEvent = ReceiveEvent;
+        arduinoConnector.receiveEvent = ReceiveEvent;
     }
 
     private void ReceiveEvent(string msg)
@@ -33,7 +34,7 @@ public class Test : MonoBehaviour
     }
 
     public void ClickBtn() {
-        
-        ArduinoConnector.writeEvent("1");
+
+        arduinoConnector.writeEvent("1");
     }
 }
