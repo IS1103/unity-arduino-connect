@@ -56,7 +56,7 @@ public class ArduinoConnector : MonoBehaviour
 
     private void Update()
     {
-        if (queue.Count>0)
+        if (queue != null && queue.Count>0)
         {
             receiveEvent?.Invoke(queue.Dequeue());
         }
