@@ -1,4 +1,8 @@
 # Unity And Arduino Connector 
+
+## 說明
+可以快速在 Unity3D 連接 Arduino 的小插件。
+
 ## Unity ArduinoConnector.cs
 
 設定後拖拉到物件上:
